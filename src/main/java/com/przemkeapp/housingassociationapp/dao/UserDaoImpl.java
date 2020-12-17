@@ -1,6 +1,7 @@
 package com.przemkeapp.housingassociationapp.dao;
 
 import com.przemkeapp.housingassociationapp.Entity.User;
+import com.przemkeapp.housingassociationapp.exceptionhandling.UserNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,9 +26,7 @@ public class UserDaoImpl implements UserDao {
         Query query = session.createQuery("from User where userName=:theUsername");
         query.setParameter("theUsername", username);
 
-        User tempUser = (User) query.getSingleResult();
-
-        return tempUser;
+        return (User) query.getSingleResult();
     }
 
     @Override

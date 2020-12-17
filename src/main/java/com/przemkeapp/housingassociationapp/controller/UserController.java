@@ -18,12 +18,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/{username}")
+    @GetMapping("/{username}")
     public String showUser(@PathVariable("username") String username, Model theModel) {
 
         User tempUser = userService.findUserByUsername(username);
-
-        System.out.println(tempUser.getRoles().iterator().next());
 
         theModel.addAttribute("theUser", tempUser);
 
