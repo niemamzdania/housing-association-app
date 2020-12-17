@@ -29,10 +29,15 @@ public class User {
     @Column(name = "authority")
     private Set<String> roles;
 
-    public User(String userName, String password, boolean enabled, Set<String> roles) {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_details_id")
+    private UserDetail userDetail;
+
+    public User(String userName, String password, boolean enabled, Set<String> roles, UserDetail userDetail) {
         this.userName = userName;
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
+        this.userDetail = userDetail;
     }
 }

@@ -1,10 +1,10 @@
-package com.przemkeapp.housingassociationapp.service;
+package com.przemkeapp.housingassociationapp.dao;
 
 import com.przemkeapp.housingassociationapp.Entity.User;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserDao {
     User findUserByUsername(String username);
     List<User> findAllUsers();
     void saveUser(User user);
