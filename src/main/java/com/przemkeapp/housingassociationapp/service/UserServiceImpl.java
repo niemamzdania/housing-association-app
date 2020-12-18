@@ -1,5 +1,6 @@
 package com.przemkeapp.housingassociationapp.service;
 
+import com.przemkeapp.housingassociationapp.Entity.Address;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.dao.UserDao;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUserById(int userId) {
-        userDao.deleteUserById(userId);
+    public void deleteUserByUsername(String username) {
+        userDao.deleteUserByUsername(username);
+    }
+
+    @Override
+    @Transactional
+    public void saveUserAddress(Address address, String username) {
+        userDao.saveUserAddress(address, username);
     }
 }

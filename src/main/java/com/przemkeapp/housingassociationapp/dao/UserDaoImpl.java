@@ -1,5 +1,6 @@
 package com.przemkeapp.housingassociationapp.dao;
 
+import com.przemkeapp.housingassociationapp.Entity.Address;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.exceptionhandling.UserNotFoundException;
 import org.hibernate.Session;
@@ -21,26 +22,49 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User findUserByUsername(String username) {
 
-        Session session = entityManager.unwrap(Session.class);
+        Session currentSession = entityManager.unwrap(Session.class);
 
-        Query query = session.createQuery("from User where userName=:theUsername");
-        query.setParameter("theUsername", username);
+        Query<User> theQuery = currentSession.createQuery("from User where id=:theUsername");
+        theQuery.setParameter("theUsername", username);
 
-        return (User) query.getSingleResult();
+        return theQuery.getSingleResult();
     }
 
     @Override
     public List<User> findAllUsers() {
-        return null;
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        Query<User> theQuery = currentSession.createQuery("from User", User.class);
+
+        return theQuery.getResultList();
     }
 
     @Override
     public void saveUser(User user) {
-
+        Session currentSession = entityManager.unwrap(Session.class);
+        currentSession.saveOrUpdate(user);
     }
 
     @Override
-    public void deleteUserById(int id) {
+    public void deleteUserByUsername(String username) {
 
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        Query theQuery = currentSession.createQuery("delete from User where userName=:theUsername");
+        theQuery.setParameter("theUsername", username);
+
+        theQuery.executeUpdate();
+    }
+
+    @Override
+    public void saveUserAddress(Address address, String username) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        User theUser = currentSession.get(User.class, username);
+        theUser.getUserDetail().setAddress(address);
+
+        currentSession.saveOrUpdate(theUser);
     }
 }

@@ -5,11 +5,13 @@
     <title>Error Page</title>
 </head>
 <body>
+    <span th:if="${exception != null}">
     <h2><span th:text="${exception.title}"/></h2>
         <p>Status: <span th:text="${exception.status}"/></p>
         <p>Timestamp: <span th:text="${exception.timeStamp}"/></p>
         <p>Message: <span th:text="${exception.message}"/></p>
-    <hr>
-    <a th:href="@{/}">Home Page</a>
+    </span>
+    <h2 th:if="${exception == null}" th:text="'500 Internal Server Error'"></h2>
+    <div th:insert="fragments/general :: footer"/>
 </body>
 </html>

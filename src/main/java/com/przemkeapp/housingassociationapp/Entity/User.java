@@ -17,10 +17,10 @@ public class User {
     @Column(name = "username", nullable = false)
     private String userName;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "enabled")
+    @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
     @ElementCollection
@@ -33,11 +33,16 @@ public class User {
     @JoinColumn(name = "user_details_id")
     private UserDetail userDetail;
 
-    public User(String userName, String password, boolean enabled, Set<String> roles, UserDetail userDetail) {
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    public User(String userName, String password, boolean enabled, Set<String> roles,
+                UserDetail userDetail, String email) {
         this.userName = userName;
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
         this.userDetail = userDetail;
+        this.email = email;
     }
 }
