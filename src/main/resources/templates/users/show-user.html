@@ -5,9 +5,9 @@
     <title>przemke - User Page</title>
 </head>
 <body>
-    <h5>Username: <span th:text="${theUser.userName}"/></h5>
-    <h5>First name: <span th:text="${theUser.userDetail.firstName}"/></h5>
-    <h5>Last name: <span th:text="${theUser.userDetail.lastName}"/></h5>
+    <h5>Username: <span th:text="${user.userName}"/></h5>
+    <h5>First name: <span th:text="${user.userDetail.firstName}"/></h5>
+    <h5>Last name: <span th:text="${user.userDetail.lastName}"/></h5>
     <hr>
     <a th:href="@{/}">Home Page</a>
 </body>

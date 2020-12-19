@@ -3,7 +3,6 @@ package com.przemkeapp.housingassociationapp.controller;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -24,24 +23,22 @@ public class UserController {
 
     @GetMapping("/{username}")
     @PreAuthorize("#username == authentication.name || hasRole('ADMIN')")
-    public String showUser(@PathVariable("username") String username, Model theModel) {
+    public String showUser(@PathVariable("username") String username, Model model) {
 
-        User tempUser = userService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
 
-        theModel.addAttribute("theUser", tempUser);
+        model.addAttribute("user", user);
 
         return "users/show-user";
     }
 
-    @GetMapping("/all")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public String showAllUsers(Model theModel) {
+    public String showAllUsers(Model model) {
         List<User> userList = userService.findAllUsers();
 
-        theModel.addAttribute("users", userList);
+        model.addAttribute("users", userList);
 
         return "users/show-all-users";
     }
-
-
 }

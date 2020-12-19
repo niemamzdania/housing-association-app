@@ -42,7 +42,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveUser(User user) {
+
         Session currentSession = entityManager.unwrap(Session.class);
+
         currentSession.saveOrUpdate(user);
     }
 

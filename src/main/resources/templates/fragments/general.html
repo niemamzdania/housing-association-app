@@ -1,7 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="headerfiles">
-    <meta charset="UTF-8" />
+<head>
+    <span th:fragment="headerfiles">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    </span>
     <!--<link th:href="@{/css/styles.css}" rel="stylesheet">-->
 </head>
 <body>
@@ -9,6 +14,7 @@
     <h1>Thymeleaf Fragments sample</h1>
 </div>
 <p>Go to the next page to see fragments in action</p>
+<div th:fragment="container"></div>
 <aside>
     <div>This is a sidebar</div>
 </aside>

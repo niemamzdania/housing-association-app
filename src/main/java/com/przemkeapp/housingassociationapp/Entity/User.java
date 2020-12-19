@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Getter @Setter
-@NoArgsConstructor
 public class User {
 
     @Id
@@ -36,11 +35,15 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    public User(String userName, String password, boolean enabled, Set<String> roles,
+    public User() {
+        this.userDetail = new UserDetail();
+    }
+
+    public User(String userName, String password, Set<String> roles,
                 UserDetail userDetail, String email) {
         this.userName = userName;
         this.password = password;
-        this.enabled = enabled;
+        this.enabled = true;
         this.roles = roles;
         this.userDetail = userDetail;
         this.email = email;

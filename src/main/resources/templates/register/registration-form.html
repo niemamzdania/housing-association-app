@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <span th:replace="fragments/general :: headerfiles"/>
+    <title>
+        przemke - Registration Form Page
+    </title>
+</head>
+<body>
+    <div class="container">
+        <h3>Registration Form</h3>
+        <hr>
+        <form action="#" th:action="@{/register/save}" method="post" th:object="${user}">
+            <input class="form-control mb-4 col-4" type="text"
+                   th:field="*{userName}" placeholder="Username">
+            <input class="form-control mb-4 col-4" type="password"
+                   th:field="*{password}" placeholder="Password">
+            <input class="form-control mb-4 col-4" type="email"
+                   th:field="*{email}" placeholder="E-mail">
+            <input class="form-control mb-4 col-4" type="text"
+                   th:field="*{userDetail.firstName}" placeholder="First name">
+            <input class="form-control mb-4 col-4" type="text"
+                   th:field="*{userDetail.lastName}" placeholder="Last name">
+            <button class="btn btn-info col-2" type="submit">Sign up</button>
+        </form>
+    </div>
+</body>
+</html>
