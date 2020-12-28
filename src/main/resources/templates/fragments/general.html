@@ -1,27 +1,19 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="general-page">
 <head>
-    <span th:fragment="headerfiles">
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
-    </span>
-    <!--<link th:href="@{/css/styles.css}" rel="stylesheet">-->
+    <span th:replace="fragments/headerfiles :: headerfiles"/>
+    <span th:replace="this :: title"/>
 </head>
-<body>
-<div th:fragment="header">
-    <h1>Thymeleaf Fragments sample</h1>
+<body class="sb-nav-fixed">
+<nav th:replace="fragments/navbar :: navbar"/>
+<div id="layoutSidenav">
+    <div th:replace="fragments/sidebar :: sidebar"/>
+    <div id="layoutSidenav_content">
+        <main th:insert="this :: content"/>
+        <footer th:replace="fragments/footer :: footer"/>
+    </div>
 </div>
-<p>Go to the next page to see fragments in action</p>
-<div th:fragment="container"></div>
-<aside>
-    <div>This is a sidebar</div>
-</aside>
-<div class="another">This is another sidebar</div>
-<footer style="margin-top: 10px;" th:fragment="footer">
-    <hr>
-    <a th:href="@{/}">Home Page</a>
-</footer>
+<span th:replace="fragments/scripts:: scripts"/>
 </body>
 </html>

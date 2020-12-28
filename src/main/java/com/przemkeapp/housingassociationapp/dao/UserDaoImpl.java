@@ -2,13 +2,17 @@ package com.przemkeapp.housingassociationapp.dao;
 
 import com.przemkeapp.housingassociationapp.Entity.Address;
 import com.przemkeapp.housingassociationapp.Entity.User;
+import com.przemkeapp.housingassociationapp.Entity.UserDetail;
 import com.przemkeapp.housingassociationapp.exceptionhandling.UserNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -65,6 +69,7 @@ public class UserDaoImpl implements UserDao {
         Session currentSession = entityManager.unwrap(Session.class);
 
         User theUser = currentSession.get(User.class, username);
+
         theUser.getUserDetail().setAddress(address);
 
         currentSession.saveOrUpdate(theUser);

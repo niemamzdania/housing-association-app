@@ -23,15 +23,15 @@ import java.util.List;
 @Order(0)
 public class UserAspect {
 
-    @Pointcut("execution(* com.przemkeapp.housingassociationapp.dao.UserDaoImpl.*(..))")
-    private void pointcutForUserDao() {
+    @Pointcut("execution(* com.przemkeapp.housingassociationapp.service.UserServiceImpl.*(..))")
+    private void pointcutForUserService() {
     }
 
     @Pointcut("execution(* com.przemkeapp.housingassociationapp.controller.UserController.*(..))")
     private void pointcutForUserController() {
     }
 
-    @Around("pointcutForUserDao()")
+    @Around("pointcutForUserService()")
     public Object aroundUserDaoMethods(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Object result = null;

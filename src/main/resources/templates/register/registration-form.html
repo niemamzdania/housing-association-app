@@ -11,18 +11,70 @@
         <h3>Registration Form</h3>
         <hr>
         <form action="#" th:action="@{/register/save}" method="post" th:object="${user}">
-            <input class="form-control mb-4 col-4" type="text"
-                   th:field="*{userName}" placeholder="Username">
-            <input class="form-control mb-4 col-4" type="password"
-                   th:field="*{password}" placeholder="Password">
-            <input class="form-control mb-4 col-4" type="email"
-                   th:field="*{email}" placeholder="E-mail">
-            <input class="form-control mb-4 col-4" type="text"
-                   th:field="*{userDetail.firstName}" placeholder="First name">
-            <input class="form-control mb-4 col-4" type="text"
-                   th:field="*{userDetail.lastName}" placeholder="Last name">
-            <button class="btn btn-info col-2" type="submit">Sign up</button>
+            <div>
+                <label>Username</label>
+                <input class="form-control col-4" type="text"
+                   th:field="*{userName}" placeholder="username">
+                <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"/>
+                </span>
+            </div>
+            <div th:object="${userDetail}">
+                <div>
+                    <label class="mt-2">First Name</label>
+                    <input class="form-control col-4" type="text"
+                           th:field="*{firstName}" placeholder="first name">
+                    <span style="color: red;">
+                        <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"/>
+                    </span>
+                </div>
+                <div>
+                    <label class="mt-2">Last Name</label>
+                    <input class="form-control col-4" type="text"
+                           th:field="*{lastName}" placeholder="last name">
+                    <span style="color: red;">
+                        <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"/>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <label class="mt-2">E-mail</label>
+                <input class="form-control col-4" type="email"
+                       th:field="*{email}" placeholder="email">
+                <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
+                </span>
+            </div>
+            <div>
+                <label class="mt-2">Password</label>
+                <input class="form-control col-4" type="password" id="password" onkeyup='check();'
+                       th:field="*{password}" placeholder="password">
+                <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
+                </span>
+            </div>
+            <div>
+                <label class="mt-2">Confirm Password</label>
+                <input class="form-control col-4" id="confirm_password" type="password"
+                       onkeyup='check();' placeholder="confirm password">
+                <span id='message'></span>
+            </div>
+            <button id="confirm_button" class="btn btn-info mt-3 col-2" type="submit">Sign up</button>
         </form>
     </div>
 </body>
+<script>
+    const check = function () {
+        if (document.getElementById('password').value ===
+            document.getElementById('confirm_password').value) {
+            document.getElementById('confirm_button').disabled = false;
+            document.getElementById('message').style.display = "none";
+        } else {
+            document.getElementById('confirm_button').disabled = true;
+            document.getElementById('message').style.display = "block";
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').innerHTML = 'not matching';
+        }
+    };
+</script>
 </html>

@@ -1,10 +1,12 @@
 package com.przemkeapp.housingassociationapp.Entity;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
@@ -13,26 +15,33 @@ import java.util.Set;
 public class User {
 
     @Id
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
+    @Size(min = 3, max = 50 )
+    @NotNull
     private String userName;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
+    @Size(min = 8, max = 68)
+    @NotNull
     private String password;
 
-    @Column(name = "enabled", nullable = false)
+    @Column(name = "enabled")
     private boolean enabled;
 
     @ElementCollection
     @CollectionTable(name = "authorities",
-                    joinColumns = @JoinColumn(name = "username"))
+            joinColumns = @JoinColumn(name = "username"))
     @Column(name = "authority")
     private Set<String> roles;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_details_id")
+    @NotNull
     private UserDetail userDetail;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
+    @NotNull
+    @NotEmpty
     private String email;
 
     public User() {

@@ -13,8 +13,11 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private DataSource dataSource;
+
+    public AppSecurityConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -29,6 +32,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/css/**").permitAll()
+                .antMatchers("/js/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/register/*").permitAll()
                 .anyRequest().authenticated()

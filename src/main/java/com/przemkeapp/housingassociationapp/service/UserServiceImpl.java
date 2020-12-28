@@ -2,11 +2,15 @@ package com.przemkeapp.housingassociationapp.service;
 
 import com.przemkeapp.housingassociationapp.Entity.Address;
 import com.przemkeapp.housingassociationapp.Entity.User;
+import com.przemkeapp.housingassociationapp.Entity.UserDetail;
 import com.przemkeapp.housingassociationapp.dao.UserDao;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,5 +49,20 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void saveUserAddress(Address address, String username) {
         userDao.saveUserAddress(address, username);
+    }
+
+    @Override
+    @Transactional
+    public void registerUser(User user, UserDetail userDetail) {
+
+        String encryptedPassword = "{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+        user.setEnabled(true);
+        Set<String> roles = new HashSet<>();
+        roles.add("ROLE_USER");
+        user.setRoles(roles);
+        user.setUserDetail(userDetail);
+
+        userDao.saveUser(user);
     }
 }

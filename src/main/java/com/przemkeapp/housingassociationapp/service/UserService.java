@@ -2,6 +2,7 @@ package com.przemkeapp.housingassociationapp.service;
 
 import com.przemkeapp.housingassociationapp.Entity.Address;
 import com.przemkeapp.housingassociationapp.Entity.User;
+import com.przemkeapp.housingassociationapp.Entity.UserDetail;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface UserService {
     void saveUser(User user);
     void deleteUserByUsername(String username);
     void saveUserAddress(Address address, String username);
+    void registerUser(User user, UserDetail userDetail);
 }
