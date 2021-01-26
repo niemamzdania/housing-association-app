@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org"
+<html th:lang="en" xmlns:th="http://www.thymeleaf.org"
       th:fragment="general-page">
 <head>
     <span th:replace="fragments/headerfiles :: headerfiles"/>
@@ -14,6 +14,8 @@
         <footer th:replace="fragments/footer :: footer"/>
     </div>
 </div>
-<span th:replace="fragments/scripts:: scripts"/>
 </body>
+<span th:replace="~{this :: styles} ?: ~{}"/>
+<span th:replace="fragments/scripts:: main-scripts"/>
+<span th:replace="~{this :: scripts} ?: ~{}"/>
 </html>

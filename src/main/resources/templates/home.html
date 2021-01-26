@@ -1,13 +1,56 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-        th:insert="fragments/general :: general-page">
+      th:replace="fragments/general :: general-page">
 <head>
-    <head>
-        <title th:fragment="title">przemke - Home Page</title>
-    </head>
-    <body>
-        <div th:fragment="content" class="container-fluid">
-            <h1 class="ddd">HERE YOU ARE</h1>
-        </div>
-    </body>
+    <title th:fragment="title">przemke - Home Page</title>
+</head>
+<body>
+    <div id="main-container" th:fragment="content" class="container-fluid">
+        <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+    </div>
+</body>
+<style th:fragment="styles">
+    .clock {
+        opacity: 1.0;
+        font-weight: bold;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-15%) translateY(-50%);
+        //color: #34ce57;
+        color: black;
+        font-size: 60px;
+        font-family: Orbitron;
+        letter-spacing: 7px;
+</style>
+<script th:fragment="scripts">
+    function showTime(){
+        var date = new Date();
+        var h = date.getHours(); // 0 - 23
+        var m = date.getMinutes(); // 0 - 59
+        var s = date.getSeconds(); // 0 - 59
+        var session = "AM";
+
+        if(h == 0){
+            h = 12;
+        }
+
+        if(h > 12){
+            h = h - 12;
+            session = "PM";
+        }
+
+        h = (h < 10) ? "0" + h : h;
+        m = (m < 10) ? "0" + m : m;
+        s = (s < 10) ? "0" + s : s;
+
+        var time = h + ":" + m + ":" + s + " " + session;
+        document.getElementById("MyClockDisplay").innerText = time;
+        document.getElementById("MyClockDisplay").textContent = time;
+        document.body.style.backgroundColor = "#B0E0E6"
+        setTimeout(showTime, 1000);
+
+    }
+    showTime();
+</script>
 </html>

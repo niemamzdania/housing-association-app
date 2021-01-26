@@ -35,8 +35,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public List<String> findAllUsernames() {
+        return userDao.findAllUsernames();
+    }
+
+    @Override
+    @Transactional
     public void saveUser(User user) {
         userDao.saveUser(user);
+    }
+
+    @Override
+    @Transactional
+    public void saveUserData(User user, String currentUsername) {
+
+        String encryptedPassword = "{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+
+        User tempUser = userDao.findUserByUsername(currentUsername);
+        user.setUserDetail(tempUser.getUserDetail());
+        userDao.saveUserData(user);
     }
 
     @Override
@@ -63,6 +81,8 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         user.setUserDetail(userDetail);
 
-        userDao.saveUser(user);
+        if(user.getUserName().equals("jano"))
+            System.out.println(";;;;;;;;;;;;;");
+        else System.out.println("::::::::::::::::");
     }
 }

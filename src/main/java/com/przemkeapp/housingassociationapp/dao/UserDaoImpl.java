@@ -45,11 +45,29 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public List<String> findAllUsernames() {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        Query<String> theQuery = currentSession.createQuery("SELECT U.userName FROM User U");
+
+        return theQuery.getResultList();
+    }
+
+    @Override
     public void saveUser(User user) {
 
         Session currentSession = entityManager.unwrap(Session.class);
 
         currentSession.saveOrUpdate(user);
+    }
+
+    @Override
+    public void saveUserData(User user) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        currentSession.merge(user);
     }
 
     @Override
@@ -73,5 +91,31 @@ public class UserDaoImpl implements UserDao {
         theUser.getUserDetail().setAddress(address);
 
         currentSession.saveOrUpdate(theUser);
+    }
+
+    @Override
+    public void createUser(User user) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        currentSession.save(user);
+    }
+
+    @Override
+    @Transactional
+    public boolean checkIfUnique(String fieldName, String value) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        String theQuerySyntax = "select U." + fieldName + " from User U";
+        System.out.println("---->>>>" + theQuerySyntax);
+        Query<String> theQuery = currentSession.createQuery(theQuerySyntax);
+
+        for (String tempUsername : theQuery.getResultList()) {
+            if (tempUsername.equals(value))
+                return false;
+        }
+
+        return true;
     }
 }

@@ -1,7 +1,9 @@
 package com.przemkeapp.housingassociationapp.Entity;
 
+import com.przemkeapp.housingassociationapp.validation.UniqueUserField;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -10,7 +12,8 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"username", "email"}))
 @Getter @Setter
 public class User {
 
@@ -18,10 +21,11 @@ public class User {
     @Column(name = "username")
     @Size(min = 3, max = 50 )
     @NotNull
+    @UniqueUserField(value = "userName", message = "This username exist in database, type another one")
     private String userName;
 
     @Column(name = "password")
-    @Size(min = 8, max = 68)
+    @Size(min = 6, max = 68)
     @NotNull
     private String password;
 
