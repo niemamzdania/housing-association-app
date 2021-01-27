@@ -6,12 +6,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/admin")
@@ -38,15 +42,17 @@ public class AdminController {
 
     @PostMapping("/saveUserData")
     @PreAuthorize("hasRole('ADMIN')")
-    public String saveUserData(@Valid User user, BindingResult bindingResultForUser,
+    public String saveUserData(@Valid User userForm, BindingResult bindingResultForUser,
                                @RequestParam("currentUsername") String currentUsername) {
 
-        if(bindingResultForUser.hasErrors()) {
-            return "users/edit-users";
+        for(ObjectError error : bindingResultForUser.getAllErrors()) {
+            if(!Objects.equals(error.getCode(), "UniqueUserField")) {
+                return "users/edit-users";
+            }
         }
 
-        userService.saveUserData(user, currentUsername);
+        userService.saveUserData(userForm, currentUsername);
 
-        return "redirect:/";
+        return "redirect:/admin/usersList?username=" + userForm.getUserName();
     }
 }

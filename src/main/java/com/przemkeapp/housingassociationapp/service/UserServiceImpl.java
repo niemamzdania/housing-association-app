@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
 
         User tempUser = userDao.findUserByUsername(currentUsername);
         user.setUserDetail(tempUser.getUserDetail());
+
         userDao.saveUserData(user);
     }
 
@@ -81,8 +82,6 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         user.setUserDetail(userDetail);
 
-        if(user.getUserName().equals("jano"))
-            System.out.println(";;;;;;;;;;;;;");
-        else System.out.println("::::::::::::::::");
+        userDao.saveUser(user);
     }
 }

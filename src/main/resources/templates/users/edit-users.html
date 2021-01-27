@@ -6,10 +6,10 @@
 </head>
 <body>
 <div th:fragment="content" class="container-fluid">
-    <select class="custom-select mt-2 col-4">
+    <select onchange="changeUser(this.value)" class="custom-select mt-2 col-4">
         <th:block th:each="tempUsername: ${usernames}">
             <option th:value="${tempUsername}" th:text="${tempUsername}"
-                    th:selected="${tempUsername == #authentication.principal.username}"/>
+                    th:selected="${tempUsername == #request.getParameter('username')}"/>
         </th:block>
     </select>
     <hr>
@@ -20,7 +20,10 @@
             <input class="form-control col-4" type="text"
                    th:field="*{userName}" placeholder="username">
             <span style="color: red;">
-                <td th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"/>
+                <span th:if="${#fields.detailedErrors('userName')}"
+                      th:each="error: ${#fields.detailedErrors('userName')}">
+                    <td th:unless="${error.getCode() == 'UniqueUserField'}" th:text="${error.getMessage()}"/>
+                </span>
             </span>
         </div>
         <div>
@@ -28,7 +31,10 @@
             <input class="form-control col-4" type="email"
                    th:field="*{email}" placeholder="email">
             <span style="color: red;">
-                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
+                <span th:if="${#fields.detailedErrors('email')}"
+                      th:each="error: ${#fields.detailedErrors('email')}">
+                    <td th:unless="${error.getCode() == 'UniqueUserField'}" th:text="${error.getMessage()}"/>
+                </span>
             </span>
         </div>
         <div>
@@ -73,7 +79,7 @@
         <button id="confirm_button" class="btn btn-info mt-3 col-2" type="submit">Save changes</button>
     </form>
 </div>
-<script th:fragment="scripts">
+<script th:inline="javascript" th:fragment="scripts">
     const check = function () {
         if (document.getElementById('password').value ===
             document.getElementById('confirm_password').value) {
@@ -86,6 +92,13 @@
             document.getElementById('message').innerHTML = 'not matching';
         }
     };
+
+    function changeUser(username) {
+        var url = /*[[@{/admin/usersList}]]*/ null;
+        url += '?username=' + username;
+
+        window.location.href = url;
+    }
 </script>
 </body>
 </html>

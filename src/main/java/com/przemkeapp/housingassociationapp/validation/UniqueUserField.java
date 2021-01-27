@@ -11,11 +11,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueUserField {
-    public String value();
+    String value();
 
-    public String message() default "this value exist in the database, type another one";
+    String message() default "this value exist in the database, type another one";
 
-    public Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-    public Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

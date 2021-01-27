@@ -40,6 +40,13 @@ public class UserAspect {
             result = joinPoint.proceed();
         } catch (EmptyResultDataAccessException e) {
             throw new UserNotFoundException(e.getMessage());
+        } catch (NullPointerException e) {
+            System.out.println("================>>>>>>>>>>> " + e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println("===============>>>>>>>>>>>>>>>>>> " + e.getMessage());
+            System.out.println("===============>>>>>>>>>>>>>>>>>> " + e.getCause());
+            e.printStackTrace();
         }
 
         return result;

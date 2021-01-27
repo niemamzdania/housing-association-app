@@ -90,15 +90,7 @@ public class UserDaoImpl implements UserDao {
 
         theUser.getUserDetail().setAddress(address);
 
-        currentSession.saveOrUpdate(theUser);
-    }
-
-    @Override
-    public void createUser(User user) {
-
-        Session currentSession = entityManager.unwrap(Session.class);
-
-        currentSession.save(user);
+        currentSession.update(theUser);
     }
 
     @Override
@@ -108,12 +100,13 @@ public class UserDaoImpl implements UserDao {
         Session currentSession = entityManager.unwrap(Session.class);
 
         String theQuerySyntax = "select U." + fieldName + " from User U";
-        System.out.println("---->>>>" + theQuerySyntax);
+
         Query<String> theQuery = currentSession.createQuery(theQuerySyntax);
 
-        for (String tempUsername : theQuery.getResultList()) {
-            if (tempUsername.equals(value))
+        for (Object tempFieldName : theQuery.getResultList()) {
+            if (tempFieldName.equals(fieldName)) {
                 return false;
+            }
         }
 
         return true;

@@ -13,6 +13,5 @@ public interface UserDao {
     void saveUserData(User user);
     void deleteUserByUsername(String username);
     void saveUserAddress(Address address, String username);
-    void createUser(User user);
     boolean checkIfUnique(String fieldName, String value);
 }
