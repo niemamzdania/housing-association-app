@@ -24,6 +24,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional
     public User findUserByUsername(String username) {
 
         Session currentSession = entityManager.unwrap(Session.class);
@@ -35,6 +36,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional
     public List<User> findAllUsers() {
 
         Session currentSession = entityManager.unwrap(Session.class);
@@ -45,6 +47,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional
     public List<String> findAllUsernames() {
 
         Session currentSession = entityManager.unwrap(Session.class);
@@ -55,6 +58,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional
     public void saveUser(User user) {
 
         Session currentSession = entityManager.unwrap(Session.class);
@@ -63,6 +67,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional
     public void saveUserData(User user) {
 
         Session currentSession = entityManager.unwrap(Session.class);
@@ -71,17 +76,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional
     public void deleteUserByUsername(String username) {
 
         Session currentSession = entityManager.unwrap(Session.class);
 
-        Query theQuery = currentSession.createQuery("delete from User where userName=:theUsername");
-        theQuery.setParameter("theUsername", username);
+        User tempUser = currentSession.get(User.class, username);
 
-        theQuery.executeUpdate();
+        currentSession.delete(tempUser);
     }
 
     @Override
+    @Transactional
     public void saveUserAddress(Address address, String username) {
 
         Session currentSession = entityManager.unwrap(Session.class);
@@ -110,5 +116,18 @@ public class UserDaoImpl implements UserDao {
         }
 
         return true;
+    }
+
+    @Override
+    @Transactional
+    public List<String> findRolesBuUsername(String username) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        Query theQuery = currentSession.createQuery
+                ("select elements(U.roles) from User U where U.userName=:username");
+        theQuery.setParameter("username", username);
+
+        return theQuery.getResultList();
     }
 }

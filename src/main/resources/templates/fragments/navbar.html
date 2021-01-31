@@ -30,7 +30,7 @@
                     <a class="dropdown-item" th:href="@{/register/form}">Create Account</a>
                 </div>
                 <div sec:authorize="isAuthenticated()">
-                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" th:href="@{/user/showProfile}">Profile</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" th:href="@{/logout}">Logout</a>
                 </div>

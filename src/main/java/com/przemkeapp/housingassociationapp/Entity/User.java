@@ -12,12 +12,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Getter @Setter
+@Getter
+@Setter
 public class User {
 
     @Id
     @Column(name = "username")
-    @Size(min = 3, max = 50 )
+    @Size(min = 3, max = 50)
     @NotNull
     @UniqueUserField(value = "userName",
             message = "Account with this username already exist, type another one")
@@ -61,5 +62,29 @@ public class User {
         this.roles = roles;
         this.userDetail = userDetail;
         this.email = email;
+    }
+
+    public boolean getEnabled() {
+        return this.enabled;
+    }
+
+    public void changeUserDetail(UserDetail newUserDetail) {
+        if (this.userDetail == null) {
+            this.userDetail = new UserDetail();
+            this.userDetail.setId(0);
+        }
+        this.userDetail.setFirstName(newUserDetail.getFirstName());
+        this.userDetail.setLastName(newUserDetail.getLastName());
+        this.userDetail.setPhoneNumber(newUserDetail.getPhoneNumber());
+        this.userDetail.setPhoto(newUserDetail.getPhoto());
+        this.userDetail.changeAddress(newUserDetail.getAddress());
+    }
+
+    public void changeData(User data) {
+        this.setUserName(data.getUserName());
+        this.setEmail(data.getEmail());
+        this.setPassword(data.getPassword());
+        this.setRoles(data.getRoles());
+        this.setEnabled(data.getEnabled());
     }
 }

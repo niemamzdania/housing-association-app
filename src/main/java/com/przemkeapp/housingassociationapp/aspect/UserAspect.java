@@ -41,7 +41,7 @@ public class UserAspect {
         } catch (EmptyResultDataAccessException e) {
             throw new UserNotFoundException(e.getMessage());
         } catch (NullPointerException e) {
-            System.out.println("================>>>>>>>>>>> " + e.getMessage());
+            e.printStackTrace();
         }
         catch (Exception e) {
             System.out.println("===============>>>>>>>>>>>>>>>>>> " + e.getMessage());

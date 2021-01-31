@@ -7,7 +7,7 @@
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
-                <div class="sb-sidenav-menu-heading">Personal</div>
+                <div class="sb-sidenav-menu-heading">Access</div>
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts"
                    aria-expanded="false" aria-controls="collapseLayouts">
                     <div style="line-height: .6em;" class="sb-nav-link-icon"><i class="bi bi-file-lock2"></i></div>
@@ -30,15 +30,19 @@
                 <div sec:authorize="isAuthenticated()">
                     <!-- User bookmark -->
                     <div class="sb-sidenav-menu-heading">Profile</div>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/user/showProfile}">
                         <div style="line-height: .6em" class="sb-nav-link-icon"><i class="bi bi-person-square"></i></div>
-                        Profile data
+                        Show Profile
+                    </a>
+                    <a class="nav-link" th:href="@{/user/editProfile}">
+                        <div style="line-height: .6em" class="sb-nav-link-icon"><i class="bi bi-pen"></i></div>
+                        Edit Profile
                     </a>
                 </div>
                 <div sec:authorize="hasRole('ADMIN')">
                     <!-- Admin bookmark -->
                     <div class="sb-sidenav-menu-heading">Admin</div>
-                    <a class="nav-link" th:href="@{/admin/usersList(username=${#authentication.principal.username})}">
+                    <a class="nav-link" th:href="@{/user/editUser(username=${#authentication.principal.username})}">
                         <div class="sb-nav-link-icon"><i class="bi bi-pencil-square"></i></div>
                         Edit users
                     </a>

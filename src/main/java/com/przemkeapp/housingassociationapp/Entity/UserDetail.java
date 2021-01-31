@@ -11,7 +11,8 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users_details")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 public class UserDetail {
 
@@ -31,7 +32,7 @@ public class UserDetail {
     private String lastName;
 
     @Column(name = "phone_number")
-    @Pattern(regexp = "[0-9]{3}+-+[0-9]{3}+-+[0-9]{3}",
+    @Pattern(regexp = "^(?:[0-9]{3}+-+[0-9]{3}+-+[0-9]{3}|)$",
             message = "It must be expression in this type: 000-000-000")
     private String phoneNumber;
 
@@ -39,27 +40,23 @@ public class UserDetail {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    public UserDetail(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public UserDetail(String firstName, String lastName, String phoneNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-    }
-
-    public UserDetail(String firstName, String lastName, Address address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-    }
+    @Column(name = "photo")
+    private byte[] photo;
 
     public UserDetail(String firstName, String lastName, String phoneNumber, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.address = address;
+    }
+
+    public void changeAddress(Address newAddress) {
+        if (this.address == null) {
+            this.address = new Address();
+            this.address.setId(0);
+        }
+        this.address.setCity(newAddress.getCity());
+        this.address.setStreet(newAddress.getStreet());
+        this.address.setPostalCode(newAddress.getPostalCode());
     }
 }

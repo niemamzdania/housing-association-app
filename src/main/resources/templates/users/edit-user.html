@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/general :: general-page">
+<head>
+    <title th:fragment="title">przemke - edit users</title>
+</head>
+<body>
+<div th:fragment="content" class="container-fluid">
+    <div sec:authorize="hasRole('ADMIN')" th:unless="${isAdminProfile}">
+        <select onchange="changeUser(this.value)" class="custom-select mt-2 col-4">
+            <th:block th:each="tempUsername: ${usernames}">
+                <option th:value="${tempUsername}" th:text="${tempUsername}"
+                        th:selected="${tempUsername == #request.getParameter('username')}"/>
+            </th:block>
+        </select>
+        <hr>
+    </div>
+    <div class="mt-3"/>
+    <div style="float: left;" class="col-4">
+        <h5>User data</h5>
+        <form action="#" th:action="@{/user/saveUserData}" method="post" th:object="${userObject}">
+            <div>
+                <label>Username</label>
+                <input class="form-control" type="text"
+                       th:field="*{userName}" placeholder="username">
+                <span style="color: red;">
+                <span th:if="${#fields.detailedErrors('userName')}"
+                      th:each="error: ${#fields.detailedErrors('userName')}">
+                    <td th:unless="${error.getCode() == 'UniqueUserField'}" th:text="${error.getMessage()}"/>
+                </span>
+            </span>
+            </div>
+            <div>
+                <label class="mt-2">E-mail</label>
+                <input class="form-control" type="email"
+                       th:field="*{email}" placeholder="email">
+                <span style="color: red;">
+                <span th:if="${#fields.detailedErrors('email')}"
+                      th:each="error: ${#fields.detailedErrors('email')}">
+                    <td th:unless="${error.getCode() == 'UniqueUserField'}" th:text="${error.getMessage()}"/>
+                </span>
+            </span>
+            </div>
+            <div>
+                <label class="mt-2">Password</label>
+                <input class="form-control" type="password" id="password" onkeyup='check();'
+                       th:field="*{password}" placeholder="password">
+                <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
+                </span>
+            </div>
+            <div>
+                <label class="mt-2">Confirm Password</label>
+                <input class="form-control" id="confirm_password" type="password"
+                       onkeyup='check();' placeholder="confirm password">
+                <span id='message'></span>
+            </div>
+            <div sec:authorize="hasRole('ADMIN')">
+                <div>
+                    <div><label class="mt-2">Roles</label></div>
+                    <div style="float: left;" class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" th:field="*{roles}" th:value="ROLE_USER">
+                            User
+                        </label>
+                    </div>
+                    <div style="float: left;" class="form-check ml-2">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" th:field="*{roles}" th:value="ROLE_ADMIN">
+                            Admin
+                        </label>
+                    </div>
+                </div>
+                <div style="clear: both;">
+                    <label class="mt-2">Enabled</label>
+                    <div>
+                        <select class="custom-select" th:field="*{enabled}">
+                            <option th:value="true" th:selected="${userObject.enabled} == true">Yes</option>
+                            <option th:value="false" th:selected="${userObject.enabled} == false">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div sec:authorize="!hasRole('ADMIN')">
+                <input type="hidden" th:field="*{roles}" th:value="ROLE_USER">
+                <input type="hidden" th:field="*{enabled}" th:value="true">
+            </div>
+            <input id="input" type="hidden" name="username" th:value="${userObject.userName}">
+            <button id="confirm_button" class="btn btn-info mt-3 mb-2" type="submit">Save changes</button>
+        </form>
+    </div>
+    <div style="float: left;" class="ml-5 col-4">
+        <h5>Personal data</h5>
+        <form action="#" th:action="@{/user/savePersonalData}" method="post" th:object="${userDetails}">
+            <div>
+                <label>First name</label>
+                <input class="form-control" type="text"
+                       th:field="*{firstName}" placeholder="First name">
+                <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"/>
+                </span>
+            </div>
+            <div>
+                <label class="mt-2">Last name</label>
+                <input class="form-control" type="text"
+                       th:field="*{lastName}" placeholder="Last name">
+                <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"/>
+                </span>
+            </div>
+            <div>
+                <label class="mt-2">Phone number</label>
+                <input class="form-control" type="text"
+                       th:field="*{phoneNumber}" placeholder="Phone number">
+                <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"/>
+                </span>
+            </div>
+            <div th:object="${userAddress}">
+                <div>
+                    <label class="mt-2">City</label>
+                    <input class="form-control" type="text"
+                           th:field="*{city}" placeholder="City">
+                    <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('city')}" th:errors="*{city}"/>
+                </span>
+                </div>
+                <div>
+                    <label class="mt-2">Street</label>
+                    <input class="form-control" type="text"
+                           th:field="*{street}" placeholder="Street">
+                    <span style="color: red;">
+                    <td th:if="${#fields.hasErrors('street')}" th:errors="*{street}"/>
+                </span>
+                </div>
+                <div>
+                    <label class="mt-2">Postal code</label>
+                    <input class="form-control" type="text"
+                           th:field="*{postalCode}" placeholder="Postal code">
+                    <span style="color: red;">
+                        <td th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"/>
+                    </span>
+                </div>
+            </div>
+            <input type="hidden" id="username" name="username" th:value="${userObject.userName}">
+            <button class="btn btn-info mt-3 mb-2" type="submit">Save changes</button>
+        </form>
+    </div>
+</div>
+<script th:inline="javascript" th:fragment="scripts">
+    const check = function () {
+        if (document.getElementById('password').value ===
+            document.getElementById('confirm_password').value) {
+            document.getElementById('confirm_button').disabled = false;
+            document.getElementById('message').style.display = "none";
+        } else {
+            document.getElementById('confirm_button').disabled = true;
+            document.getElementById('message').style.display = "block";
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').innerHTML = 'not matching';
+        }
+    };
+
+    function changeUser(username) {
+        var url = /*[[@{/user/editUser}]]*/ null;
+        url += '?username=' + username;
+
+        window.location.href = url;
+    }
+</script>
+</body>
+</html>
