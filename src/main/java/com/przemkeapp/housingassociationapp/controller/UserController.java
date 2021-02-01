@@ -48,7 +48,7 @@ public class UserController {
         Set<String> roles = userService.findRolesByUsername(auth.getName());
 
         if (roles.contains("ROLE_ADMIN")) {
-            redirectAttributes.addFlashAttribute("isAdminProfile", true);
+            redirectAttributes.addFlashAttribute("isAdminProfile", "#");
         }
 
         return "redirect:/user/editUser?username=" + auth.getName();

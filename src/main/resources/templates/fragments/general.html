@@ -10,6 +10,7 @@
 <div id="layoutSidenav">
     <div th:replace="fragments/sidebar :: sidebar"/>
     <div id="layoutSidenav_content">
+        <div th:replace="fragments/alerts :: alert"/>
         <main th:insert="this :: content"/>
         <footer th:replace="fragments/footer :: footer"/>
     </div>
@@ -18,4 +19,11 @@
 <span th:replace="~{this :: styles} ?: ~{}"/>
 <span th:replace="fragments/scripts:: main-scripts"/>
 <span th:replace="~{this :: scripts} ?: ~{}"/>
+<script>
+    window.setTimeout(function() {
+        $(".alert").delay(5000).queue(function () {
+            $(this).remove();
+        })
+    });
+</script>
 </html>

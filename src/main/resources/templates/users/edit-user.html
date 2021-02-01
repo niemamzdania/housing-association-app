@@ -6,6 +6,13 @@
 </head>
 <body>
 <div th:fragment="content" class="container-fluid">
+    <nav style="background-color: #e9ecef;" aria-label="breadcrumb" class="main-breadcrumb mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/user/showProfile}">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+        </ol>
+    </nav>
     <div sec:authorize="hasRole('ADMIN')" th:unless="${isAdminProfile}">
         <select onchange="changeUser(this.value)" class="custom-select mt-2 col-4">
             <th:block th:each="tempUsername: ${usernames}">
@@ -13,10 +20,14 @@
                         th:selected="${tempUsername == #request.getParameter('username')}"/>
             </th:block>
         </select>
+        <button class="btn btn-danger ml-3 mt-1">
+            <a style="text-decoration: none; color: white;" th:href="@{/admin/deleteUser(username=${userObject.userName})}" th:text="Delete"
+                onclick="return confirm('Are you sure you want to delete user?')"/>
+        </button>
         <hr>
     </div>
     <div class="mt-3"/>
-    <div style="float: left;" class="col-4">
+    <div style="float: left; border: 2px solid; border-color: #ffffff #19456b #ffffff #ffffff;" class="pr-4 col-4">
         <h5>User data</h5>
         <form action="#" th:action="@{/user/saveUserData}" method="post" th:object="${userObject}">
             <div>
@@ -89,7 +100,7 @@
             <button id="confirm_button" class="btn btn-info mt-3 mb-2" type="submit">Save changes</button>
         </form>
     </div>
-    <div style="float: left;" class="ml-5 col-4">
+    <div style="float: left;" class="ml-4 col-4">
         <h5>Personal data</h5>
         <form action="#" th:action="@{/user/savePersonalData}" method="post" th:object="${userDetails}">
             <div>
@@ -146,6 +157,7 @@
             <button class="btn btn-info mt-3 mb-2" type="submit">Save changes</button>
         </form>
     </div>
+    <span hidden="hidden" id="isAdminProfile" th:text="${isAdminProfile}"/>
 </div>
 <script th:inline="javascript" th:fragment="scripts">
     const check = function () {
@@ -166,6 +178,16 @@
         url += '?username=' + username;
 
         window.location.href = url;
+    }
+
+    var editUsersLink = document.getElementById('editUsersLink');
+    var isAdmin = document.getElementById('isAdminProfile').textContent;
+
+    window.onload = function () {
+        if (isAdmin !== '') {
+            document.getElementById('editUsersLink').classList.remove('active');
+            document.getElementById('editProfileLink').classList.add('active');
+        }
     }
 </script>
 </body>

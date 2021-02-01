@@ -34,7 +34,7 @@
                         <div style="line-height: .6em" class="sb-nav-link-icon"><i class="bi bi-person-square"></i></div>
                         Show Profile
                     </a>
-                    <a class="nav-link" th:href="@{/user/editProfile}">
+                    <a id="editProfileLink" class="nav-link" th:href="@{/user/editProfile}">
                         <div style="line-height: .6em" class="sb-nav-link-icon"><i class="bi bi-pen"></i></div>
                         Edit Profile
                     </a>
@@ -42,7 +42,7 @@
                 <div sec:authorize="hasRole('ADMIN')">
                     <!-- Admin bookmark -->
                     <div class="sb-sidenav-menu-heading">Admin</div>
-                    <a class="nav-link" th:href="@{/user/editUser(username=${#authentication.principal.username})}">
+                    <a id="editUsersLink" class="nav-link" th:href="@{/user/editUser(username=${#authentication.principal.username})}">
                         <div class="sb-nav-link-icon"><i class="bi bi-pencil-square"></i></div>
                         Edit users
                     </a>
