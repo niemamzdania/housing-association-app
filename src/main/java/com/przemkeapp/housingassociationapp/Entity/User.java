@@ -50,18 +50,23 @@ public class User {
             message = "Account with this e-mail address already exist")
     private String email;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "community_id")
+    private Community community;
+
     public User() {
         this.userDetail = new UserDetail();
     }
 
     public User(String userName, String password, Set<String> roles,
-                UserDetail userDetail, String email) {
+                UserDetail userDetail, String email, Community community) {
         this.userName = userName;
         this.password = password;
         this.enabled = true;
         this.roles = roles;
         this.userDetail = userDetail;
         this.email = email;
+        this.community = community;
     }
 
     public boolean getEnabled() {
@@ -86,5 +91,6 @@ public class User {
         this.setPassword(data.getPassword());
         this.setRoles(data.getRoles());
         this.setEnabled(data.getEnabled());
+        this.setCommunity(data.getCommunity());
     }
 }

@@ -1,6 +1,7 @@
 package com.przemkeapp.housingassociationapp.service;
 
 import com.przemkeapp.housingassociationapp.Entity.Address;
+import com.przemkeapp.housingassociationapp.Entity.Community;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.Entity.UserDetail;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,4 +21,5 @@ public interface UserService {
     InputStream findPhotoByUsername(String username);
     void saveUserPersonalData(String username, UserDetail userDetail, Address userAddress);
     void registerUser(User user, UserDetail userDetail);
+    List<Community> findAllCommunities();
 }

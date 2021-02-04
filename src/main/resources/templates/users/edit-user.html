@@ -21,8 +21,9 @@
             </th:block>
         </select>
         <button class="btn btn-danger ml-3 mt-1">
-            <a style="text-decoration: none; color: white;" th:href="@{/admin/deleteUser(username=${userObject.userName})}" th:text="Delete"
-                onclick="return confirm('Are you sure you want to delete user?')"/>
+            <a style="text-decoration: none; color: white;"
+               th:href="@{/admin/deleteUser(username=${userObject.userName})}" th:text="Delete"
+               onclick="return confirm('Are you sure you want to delete user?')"/>
         </button>
         <hr>
     </div>
@@ -35,22 +36,22 @@
                 <input class="form-control" type="text"
                        th:field="*{userName}" placeholder="username">
                 <span style="color: red;">
-                <span th:if="${#fields.detailedErrors('userName')}"
-                      th:each="error: ${#fields.detailedErrors('userName')}">
-                    <td th:unless="${error.getCode() == 'UniqueUserField'}" th:text="${error.getMessage()}"/>
+                    <span th:if="${#fields.detailedErrors('userName')}"
+                          th:each="error: ${#fields.detailedErrors('userName')}">
+                        <td th:unless="${error.getCode() == 'UniqueUserField'}" th:text="${error.getMessage()}"/>
+                    </span>
                 </span>
-            </span>
             </div>
             <div>
                 <label class="mt-2">E-mail</label>
                 <input class="form-control" type="email"
                        th:field="*{email}" placeholder="email">
                 <span style="color: red;">
-                <span th:if="${#fields.detailedErrors('email')}"
-                      th:each="error: ${#fields.detailedErrors('email')}">
-                    <td th:unless="${error.getCode() == 'UniqueUserField'}" th:text="${error.getMessage()}"/>
+                    <span th:if="${#fields.detailedErrors('email')}"
+                          th:each="error: ${#fields.detailedErrors('email')}">
+                        <td th:unless="${error.getCode() == 'UniqueUserField'}" th:text="${error.getMessage()}"/>
+                    </span>
                 </span>
-            </span>
             </div>
             <div>
                 <label class="mt-2">Password</label>
@@ -91,10 +92,26 @@
                         </select>
                     </div>
                 </div>
+                <div>
+                    <label class="mt-2">Community</label>
+                    <div>
+                        <select id="communitySelect" onchange="changeCommunityId(this.options[this.selectedIndex].id)" class="custom-select" th:field="*{community.name}">
+                            <th:block th:each="tempCommunity: ${communities}">
+                                <option th:id="${tempCommunity.id}" th:value="${tempCommunity.name}" th:text="${tempCommunity.name}"
+                                        th:selected="${userObject.community == tempCommunity}"/>
+                            </th:block>
+                        </select>
+                        <input id="communityIdInput" type="hidden" th:field="*{community.id}"/>
+                    </div>
+                </div>
             </div>
             <div sec:authorize="!hasRole('ADMIN')">
-                <input type="hidden" th:field="*{roles}" th:value="ROLE_USER">
-                <input type="hidden" th:field="*{enabled}" th:value="true">
+                <input type="hidden" th:field="*{roles}">
+                <input type="hidden" th:field="*{enabled}">
+                <th:block th:object="${userObject.community}">
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{name}">
+                </th:block>
             </div>
             <input id="input" type="hidden" name="username" th:value="${userObject.userName}">
             <button id="confirm_button" class="btn btn-info mt-3 mb-2" type="submit">Save changes</button>
@@ -133,8 +150,8 @@
                     <input class="form-control" type="text"
                            th:field="*{city}" placeholder="City">
                     <span style="color: red;">
-                    <td th:if="${#fields.hasErrors('city')}" th:errors="*{city}"/>
-                </span>
+                        <td th:if="${#fields.hasErrors('city')}" th:errors="*{city}"/>
+                    </span>
                 </div>
                 <div>
                     <label class="mt-2">Street</label>
@@ -184,10 +201,19 @@
     var isAdmin = document.getElementById('isAdminProfile').textContent;
 
     window.onload = function () {
+
+        let selectedCommunity = document.getElementById('communitySelect');
+        let communityIdInput = document.getElementById('communityIdInput');
+        communityIdInput.value = selectedCommunity.options[selectedCommunity.selectedIndex].id;
+
         if (isAdmin !== '') {
             document.getElementById('editUsersLink').classList.remove('active');
             document.getElementById('editProfileLink').classList.add('active');
         }
+    }
+
+    function changeCommunityId(communityId) {
+        document.getElementById('communityIdInput').value = communityId;
     }
 </script>
 </body>

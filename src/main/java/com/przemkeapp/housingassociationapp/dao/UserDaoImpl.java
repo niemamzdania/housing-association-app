@@ -1,6 +1,7 @@
 package com.przemkeapp.housingassociationapp.dao;
 
 import com.przemkeapp.housingassociationapp.Entity.Address;
+import com.przemkeapp.housingassociationapp.Entity.Community;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.Entity.UserDetail;
 import com.przemkeapp.housingassociationapp.exceptionhandling.UserNotFoundException;
@@ -41,7 +42,7 @@ public class UserDaoImpl implements UserDao {
 
         Session currentSession = entityManager.unwrap(Session.class);
 
-        Query<User> theQuery = currentSession.createQuery("from User", User.class);
+        Query<User> theQuery = currentSession.createQuery("from User");
 
         return theQuery.getResultList();
     }
@@ -127,6 +128,17 @@ public class UserDaoImpl implements UserDao {
         Query theQuery = currentSession.createQuery
                 ("select elements(U.roles) from User U where U.userName=:username");
         theQuery.setParameter("username", username);
+
+        return theQuery.getResultList();
+    }
+
+    @Override
+    @Transactional
+    public List<Community> findAllCommunities() {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        Query<Community> theQuery = currentSession.createQuery("from Community");
 
         return theQuery.getResultList();
     }

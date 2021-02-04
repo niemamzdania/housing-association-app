@@ -78,8 +78,8 @@ public class UserController {
         Set<String> roles = userService.findRolesByUsername(auth.getName());
 
         if (roles.contains("ROLE_ADMIN")) {
-            List<String> usernames = userService.findAllUsernames();
-            model.addAttribute("usernames", usernames);
+            model.addAttribute("usernames", userService.findAllUsernames());
+            model.addAttribute("communities", userService.findAllCommunities());
         }
 
         User user = userService.findUserByUsername(username);

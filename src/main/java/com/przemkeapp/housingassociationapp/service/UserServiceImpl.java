@@ -1,6 +1,7 @@
 package com.przemkeapp.housingassociationapp.service;
 
 import com.przemkeapp.housingassociationapp.Entity.Address;
+import com.przemkeapp.housingassociationapp.Entity.Community;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.Entity.UserDetail;
 import com.przemkeapp.housingassociationapp.dao.UserDao;
@@ -111,5 +112,10 @@ public class UserServiceImpl implements UserService {
         user.getUserDetail().setAddress(new Address());
 
         userDao.saveUser(user);
+    }
+
+    @Override
+    public List<Community> findAllCommunities() {
+        return userDao.findAllCommunities();
     }
 }
