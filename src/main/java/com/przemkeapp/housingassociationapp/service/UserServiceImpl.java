@@ -5,6 +5,8 @@ import com.przemkeapp.housingassociationapp.Entity.Community;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.Entity.UserDetail;
 import com.przemkeapp.housingassociationapp.dao.UserDao;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,12 +41,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUserData(User user, String currentUsername) {
 
-        String encryptedPassword = "{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword());
-        user.setPassword(encryptedPassword);
+        if (user.getCommunity().getId() == null) {
+            user.setCommunity(null);
+        }
 
         User tempUser = userDao.findUserByUsername(currentUsername);
 
-        if (!tempUser.getUserName().equals(user.getUserName()) ||  !tempUser.getEmail().equals(user.getEmail())) {
+        user.setPassword(tempUser.getPassword());
+
+        if (!tempUser.getUserName().equals(user.getUserName()) || !tempUser.getEmail().equals(user.getEmail())) {
             user.changeUserDetail(tempUser.getUserDetail());
             userDao.deleteUserByUsername(currentUsername);
             userDao.saveUser(user);
@@ -117,5 +122,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Community> findAllCommunities() {
         return userDao.findAllCommunities();
+    }
+
+    @Override
+    public boolean checkPassword(String currentPassword) {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User tempUser = userDao.findUserByUsername(username);
+        char[] tempPassword;
+        StringBuilder userEncodedPassword = new StringBuilder();
+        for (int i = 8; i < tempUser.getPassword().length(); i++) {
+            userEncodedPassword.append(tempUser.getPassword().charAt(i));
+        }
+
+        return new BCryptPasswordEncoder().matches(currentPassword, userEncodedPassword.toString());
+    }
+
+    @Override
+    public void changePassword(String newPassword) {
+
+        newPassword = new BCryptPasswordEncoder().encode(newPassword);
+        newPassword = "{bcrypt}" + newPassword;
+
+        User user = userDao.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        user.setPassword(newPassword);
+        userDao.saveUser(user);
     }
 }

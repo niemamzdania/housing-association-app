@@ -10,6 +10,22 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ModelAndView handle(Exception exc) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                exc.getMessage(),
+                System.currentTimeMillis()
+        );
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("exception", errorResponse);
+        modelAndView.setViewName("error");
+        return modelAndView;
+    }
+
     @ExceptionHandler
     public ModelAndView handleException(NumberFormatException exc) {
 
@@ -31,22 +47,6 @@ public class GlobalExceptionHandler {
         ModelAndView view = new ModelAndView();
         view.setViewName("access-denied");
         return view;
-    }
-
-    @ExceptionHandler
-    public ModelAndView handleException(NoHandlerFoundException exc) {
-
-        ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                HttpStatus.NOT_FOUND.getReasonPhrase(),
-                exc.getMessage(),
-                System.currentTimeMillis()
-        );
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("exception", errorResponse);
-        modelAndView.setViewName("error");
-        return modelAndView;
     }
 
     @ExceptionHandler

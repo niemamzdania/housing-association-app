@@ -22,4 +22,6 @@ public interface UserService {
     void saveUserPersonalData(String username, UserDetail userDetail, Address userAddress);
     void registerUser(User user, UserDetail userDetail);
     List<Community> findAllCommunities();
+    boolean checkPassword(String currentPassword);
+    void changePassword(String newPassword);
 }

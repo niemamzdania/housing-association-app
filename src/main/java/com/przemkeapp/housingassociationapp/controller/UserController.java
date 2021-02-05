@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
@@ -43,12 +46,12 @@ public class UserController {
     }
 
     @GetMapping("/editProfile")
-    public String editProfile(Authentication auth, RedirectAttributes redirectAttributes) {
+    public String editProfile(Authentication auth, RedirectAttributes attributes) {
 
         Set<String> roles = userService.findRolesByUsername(auth.getName());
 
         if (roles.contains("ROLE_ADMIN")) {
-            redirectAttributes.addFlashAttribute("isAdminProfile", "#");
+            attributes.addFlashAttribute("isAdminProfilePage", true);
         }
 
         return "redirect:/user/editUser?username=" + auth.getName();
@@ -71,7 +74,7 @@ public class UserController {
     }
 
     @GetMapping("/editUser")
-    @PreAuthorize("hasRole('ADMIN') or #username .equals(authentication.name)")
+    @PreAuthorize("hasRole('ADMIN') or #username.equals(authentication.name)")
     public String editUser(Model model, Authentication auth,
                            @RequestParam("username") String username) {
 
@@ -80,6 +83,7 @@ public class UserController {
         if (roles.contains("ROLE_ADMIN")) {
             model.addAttribute("usernames", userService.findAllUsernames());
             model.addAttribute("communities", userService.findAllCommunities());
+            model.addAttribute("isAdmin", true);
         }
 
         User user = userService.findUserByUsername(username);
@@ -99,21 +103,29 @@ public class UserController {
     public String saveUserData(@Valid @ModelAttribute("userObject") User userForm,
                                BindingResult bindingResultForUser,
                                @RequestParam("username") String username,
-                               RedirectAttributes redirectAttributes
-    ) {
+                               RedirectAttributes attributes,
+                               HttpServletRequest request
+    ) throws ServletException {
 
         for (ObjectError error : bindingResultForUser.getAllErrors()) {
             if (!Objects.equals(error.getCode(), "UniqueUserField")) {
-                redirectAttributes.addFlashAttribute
+                attributes.addFlashAttribute
                         ("org.springframework.validation.BindingResult.userObject", bindingResultForUser);
-                redirectAttributes.addFlashAttribute
+                attributes.addFlashAttribute
                         ("userObject", userForm);
 
                 return "redirect:/user/editUser?username=" + username;
             }
         }
 
+        String tempPassword = userForm.getPassword();
+
         userService.saveUserData(userForm, username);
+
+        if (!userForm.getRoles().contains("ROLE_ADMIN") && request.getUserPrincipal().getName().equals(username)) {
+            request.logout();
+            request.login(userForm.getUserName(), tempPassword);
+        }
 
         return "redirect:/user/editUser?username=" + userForm.getUserName();
     }
@@ -125,20 +137,36 @@ public class UserController {
                                    @Valid @ModelAttribute("userAddress") Address userAddressForm,
                                    BindingResult bindingResultForUserAddress,
                                    @RequestParam("username") String username,
-                                   RedirectAttributes redirectAttributes) {
+                                   RedirectAttributes attributes) {
 
         if (bindingResultForPersonalData.hasErrors() || bindingResultForUserAddress.hasErrors()) {
-            redirectAttributes.addFlashAttribute
+            attributes.addFlashAttribute
                     ("org.springframework.validation.BindingResult.userDetails", bindingResultForPersonalData);
-            redirectAttributes.addFlashAttribute
+            attributes.addFlashAttribute
                     ("org.springframework.validation.BindingResult.userAddress", bindingResultForUserAddress);
-            redirectAttributes.addFlashAttribute("userDetails", userDetailForm);
-            redirectAttributes.addFlashAttribute("userAddress", userAddressForm);
+            attributes.addFlashAttribute("userDetails", userDetailForm);
+            attributes.addFlashAttribute("userAddress", userAddressForm);
             return "redirect:/user/editUser?username=" + username;
         }
 
         userService.saveUserPersonalData(username, userDetailForm, userAddressForm);
 
         return "redirect:/user/editUser?username=" + username;
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestParam("currentPassword") String currentPassword,
+                                 @Valid @ModelAttribute("userObject") User userForm,
+                                 BindingResult bindingResultForUser,
+                                 RedirectAttributes attributes) {
+
+        if (!userService.checkPassword(currentPassword)) {
+            attributes.addFlashAttribute("passwordError", true);
+        } else {
+            userService.changePassword(userForm.getPassword());
+            attributes.addFlashAttribute("successAlert", "Password have been successfully changed!");
+        }
+
+        return "redirect:/user/editUser?username=" + SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
