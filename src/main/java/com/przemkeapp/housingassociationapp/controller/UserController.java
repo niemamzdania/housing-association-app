@@ -107,6 +107,8 @@ public class UserController {
                                HttpServletRequest request
     ) throws ServletException {
 
+        System.out.println("##################### H");
+
         for (ObjectError error : bindingResultForUser.getAllErrors()) {
             if (!Objects.equals(error.getCode(), "UniqueUserField")) {
                 attributes.addFlashAttribute

@@ -39,6 +39,28 @@
                         Edit Profile
                     </a>
                 </div>
+                <th:block th:if="${currentUser}">
+                    <div th:if="${currentUser.community}">
+                        <!-- Community bookmark -->
+                        <div class="sb-sidenav-menu-heading">Community</div>
+                        <a class="nav-link" th:href="@{/announcement/listForCommunity}">
+                            <div style="line-height: .6em" class="sb-nav-link-icon"><i class="bi bi-person-square"></i></div>
+                            Announcements
+                        </a>
+                    </div>
+                </th:block>
+                <div sec:authorize="hasRole('MANAGER')">
+                    <!-- Manager bookmark -->
+                    <div class="sb-sidenav-menu-heading">Manager</div>
+                    <a class="nav-link" th:href="@{/announcement/create}">
+                        <div class="sb-nav-link-icon"><i class="bi bi-pencil-square"></i></div>
+                        Create Announcement
+                    </a>
+                    <a class="nav-link" th:href="@{/announcement/listForUser}">
+                        <div style="line-height: .6em" class="sb-nav-link-icon"><i class="bi bi-person-square"></i></div>
+                        Edit Announcements
+                    </a>
+                </div>
                 <div sec:authorize="hasRole('ADMIN')">
                     <!-- Admin bookmark -->
                     <div class="sb-sidenav-menu-heading">Admin</div>

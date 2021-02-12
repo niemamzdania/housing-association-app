@@ -1,5 +1,6 @@
 package com.przemkeapp.housingassociationapp.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.przemkeapp.housingassociationapp.validation.UniqueUserField;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,7 +29,6 @@ public class User {
 
     @Column(name = "password")
     @Size(min = 6, max = 68)
-    @NotNull
     private String password;
 
     @Column(name = "enabled")
@@ -52,21 +54,17 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "community_id")
+    @JsonBackReference
     private Community community;
+
+    @OneToMany(mappedBy = "author",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonBackReference
+    private List<Announcement> announcementList;
 
     public User() {
         this.userDetail = new UserDetail();
-    }
-
-    public User(String userName, String password, Set<String> roles,
-                UserDetail userDetail, String email, Community community) {
-        this.userName = userName;
-        this.password = password;
-        this.enabled = true;
-        this.roles = roles;
-        this.userDetail = userDetail;
-        this.email = email;
-        this.community = community;
+        this.announcementList = new ArrayList<>();
     }
 
     public boolean getEnabled() {
@@ -92,5 +90,6 @@ public class User {
         this.setRoles(data.getRoles());
         this.setEnabled(data.getEnabled());
         this.setCommunity(data.getCommunity());
+        this.setAnnouncementList(data.getAnnouncementList());
     }
 }

@@ -5,15 +5,11 @@ import com.przemkeapp.housingassociationapp.Entity.Community;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.Entity.UserDetail;
 import com.przemkeapp.housingassociationapp.dao.UserDao;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.servlet.http.Part;
 import java.io.*;
 import java.util.HashSet;
 import java.util.List;

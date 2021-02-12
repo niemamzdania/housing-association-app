@@ -1,16 +1,17 @@
 package com.przemkeapp.housingassociationapp.aspect;
 
+import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.exceptionhandling.UserNotFoundException;
+import com.przemkeapp.housingassociationapp.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.lang.reflect.Array;
 import java.security.Principal;
@@ -27,8 +28,8 @@ public class UserAspect {
     private void pointcutForUserService() {
     }
 
-    @Pointcut("execution(* com.przemkeapp.housingassociationapp.controller.UserController.*(..))")
-    private void pointcutForUserController() {
+    @Pointcut("execution(* com.przemkeapp.housingassociationapp.controller.*.*(..))")
+    private void pointcutForController() {
     }
 
     @Around("pointcutForUserService()")

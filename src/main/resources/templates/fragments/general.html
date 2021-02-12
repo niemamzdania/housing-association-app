@@ -25,5 +25,37 @@
             $(this).remove();
         })
     });
+
+    var HttpClient = function () {
+        this.get = function (aUrl, aCallback) {
+            var anHttpRequest = new XMLHttpRequest();
+            anHttpRequest.onreadystatechange = function () {
+                if (anHttpRequest.readyState === 4 && anHttpRequest.status === 200)
+                    aCallback(anHttpRequest.responseText);
+            }
+            anHttpRequest.open("GET", aUrl, true);
+            anHttpRequest.send(null);
+        }
+    }
+
+    function previousPage(elem) {
+        if (!elem.classList.contains("disabled")) {
+            let pageId = document.getElementsByClassName("page-item active").item(0).id;
+            document.getElementById(pageId).classList.remove("active");
+            let previousPageId = parseInt(pageId) - 1;
+            previousPageId = String(previousPageId);
+            getPage(previousPageId);
+        }
+    }
+
+    function nextPage(elem) {
+        if (!elem.classList.contains("disabled")) {
+            let pageId = document.getElementsByClassName("page-item active").item(0).id;
+            document.getElementById(pageId).classList.remove("active");
+            let nextPageId = parseInt(pageId) + 1;
+            nextPageId = String(nextPageId);
+            getPage(nextPageId);
+        }
+    }
 </script>
 </html>
