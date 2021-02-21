@@ -11,4 +11,5 @@ public interface AnnouncementDao {
     List<Announcement> findAnnouncementsByUsername(String username, int page);
     int getAnnouncementsCountForAuthor(String username);
     Announcement findAnnouncementById(int id);
+    void deleteAnnouncementById(int id);
 }

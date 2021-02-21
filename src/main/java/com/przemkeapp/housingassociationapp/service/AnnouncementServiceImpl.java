@@ -1,6 +1,7 @@
 package com.przemkeapp.housingassociationapp.service;
 
 import com.przemkeapp.housingassociationapp.Entity.Announcement;
+import com.przemkeapp.housingassociationapp.Entity.Comment;
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.dao.AnnouncementDao;
 import com.przemkeapp.housingassociationapp.dao.UserDao;
@@ -61,5 +62,20 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public Announcement findAnnouncementById(int id) {
         return announcementDao.findAnnouncementById(id);
+    }
+
+    @Override
+    public void deleteAnnouncementById(int id) {
+        announcementDao.deleteAnnouncementById(id);
+    }
+
+    @Override
+    public void saveComment(int announcementId, Comment comment, String username) {
+        Announcement announcement = announcementDao.findAnnouncementById(announcementId);
+        comment.setAnnouncement(announcement);
+        comment.setDate(LocalDateTime.now());
+        User user = userDao.findUserByUsername(username);
+        comment.setAuthor(user);
+        userDao.saveComment(comment);
     }
 }

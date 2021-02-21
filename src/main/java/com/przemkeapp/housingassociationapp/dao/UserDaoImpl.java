@@ -1,9 +1,6 @@
 package com.przemkeapp.housingassociationapp.dao;
 
-import com.przemkeapp.housingassociationapp.Entity.Address;
-import com.przemkeapp.housingassociationapp.Entity.Community;
-import com.przemkeapp.housingassociationapp.Entity.User;
-import com.przemkeapp.housingassociationapp.Entity.UserDetail;
+import com.przemkeapp.housingassociationapp.Entity.*;
 import com.przemkeapp.housingassociationapp.exceptionhandling.UserNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -79,11 +76,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     @Transactional
     public void deleteUserByUsername(String username) {
-
         Session currentSession = entityManager.unwrap(Session.class);
-
         User tempUser = currentSession.get(User.class, username);
-
         currentSession.delete(tempUser);
     }
 
@@ -141,5 +135,14 @@ public class UserDaoImpl implements UserDao {
         Query<Community> theQuery = currentSession.createQuery("from Community");
 
         return theQuery.getResultList();
+    }
+
+    @Override
+    @Transactional
+    public void saveComment(Comment comment) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        currentSession.save(comment);
     }
 }

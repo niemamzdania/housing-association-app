@@ -21,7 +21,6 @@ import java.util.List;
 
 @Aspect
 @Component
-@Order(0)
 public class UserAspect {
 
     @Pointcut("execution(* com.przemkeapp.housingassociationapp.service.UserServiceImpl.*(..))")

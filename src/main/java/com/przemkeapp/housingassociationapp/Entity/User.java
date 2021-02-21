@@ -62,9 +62,15 @@ public class User {
     @JsonBackReference
     private List<Announcement> announcementList;
 
+    @OneToMany(mappedBy = "author",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonBackReference
+    private List<Comment> commentList;
+
     public User() {
         this.userDetail = new UserDetail();
         this.announcementList = new ArrayList<>();
+        this.commentList = new ArrayList<>();
     }
 
     public boolean getEnabled() {
@@ -91,5 +97,6 @@ public class User {
         this.setEnabled(data.getEnabled());
         this.setCommunity(data.getCommunity());
         this.setAnnouncementList(data.getAnnouncementList());
+        this.setCommentList(data.getCommentList());
     }
 }

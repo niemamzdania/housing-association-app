@@ -1,6 +1,7 @@
 package com.przemkeapp.housingassociationapp.dao;
 
 import com.przemkeapp.housingassociationapp.Entity.Address;
+import com.przemkeapp.housingassociationapp.Entity.Comment;
 import com.przemkeapp.housingassociationapp.Entity.Community;
 import com.przemkeapp.housingassociationapp.Entity.User;
 
@@ -17,4 +18,5 @@ public interface UserDao {
     boolean checkIfUnique(String fieldName, String value);
     List<String> findRolesBuUsername(String username);
     List<Community> findAllCommunities();
+    void saveComment(Comment comment);
 }

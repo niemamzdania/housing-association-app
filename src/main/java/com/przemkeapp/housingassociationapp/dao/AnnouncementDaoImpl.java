@@ -33,6 +33,7 @@ public class AnnouncementDaoImpl implements AnnouncementDao {
 
     @Override
     @Transactional
+    @SuppressWarnings("unchecked")
     public List<Announcement> findAnnouncementsByCommunityId(int communityId, int page) {
 
         Session currentSession = entityManager.unwrap(Session.class);
@@ -90,5 +91,17 @@ public class AnnouncementDaoImpl implements AnnouncementDao {
         Session currentSession = entityManager.unwrap(Session.class);
 
         return currentSession.get(Announcement.class, id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAnnouncementById(int id) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        Query theQuery = currentSession.createQuery("delete from Announcement where id=:announcementId");
+        theQuery.setParameter("announcementId", id);
+
+        theQuery.executeUpdate();
     }
 }

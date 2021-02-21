@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public AppSecurityConfig(DataSource dataSource) {
         this.dataSource = dataSource;
