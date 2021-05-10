@@ -36,13 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUserData(User user, String currentUsername) {
-
         if (user.getCommunity().getId() == null) {
             user.setCommunity(null);
         }
-
         User tempUser = userDao.findUserByUsername(currentUsername);
-
         user.setPassword(tempUser.getPassword());
 
         if (!tempUser.getUserName().equals(user.getUserName()) || !tempUser.getEmail().equals(user.getEmail())) {
@@ -58,21 +55,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeProfilePhoto(MultipartFile photo, String username) throws IOException {
         User user = userDao.findUserByUsername(username);
-
         InputStream inputStream = new BufferedInputStream(photo.getInputStream());
         byte[] targetArray = new byte[inputStream.available()];
         inputStream.read(targetArray);
-
         user.getUserDetail().setPhoto(targetArray);
-
         userDao.saveUser(user);
     }
 
     @Override
     public InputStream findPhotoByUsername(String username) {
-
         User user = userDao.findUserByUsername(username);
-
         return new ByteArrayInputStream(user.getUserDetail().getPhoto());
     }
 
@@ -83,26 +75,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<String> findRolesByUsername(String username) {
-
         List<String> tempRoles = userDao.findRolesBuUsername(username);
-
         return new HashSet<>(tempRoles);
     }
 
     @Override
     public void saveUserPersonalData(String username, UserDetail userDetail, Address userAddress) {
-
         User user = userDao.findUserByUsername(username);
-
         userDetail.setAddress(userAddress);
         user.changeUserDetail(userDetail);
-
         userDao.saveUser(user);
     }
 
     @Override
     public void registerUser(User user, UserDetail userDetail) {
-
         String encryptedPassword = "{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(encryptedPassword);
         user.setEnabled(true);
@@ -111,7 +97,6 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         user.setUserDetail(userDetail);
         user.getUserDetail().setAddress(new Address());
-
         userDao.saveUser(user);
     }
 
@@ -122,24 +107,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkPassword(String currentPassword) {
-
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User tempUser = userDao.findUserByUsername(username);
-        char[] tempPassword;
         StringBuilder userEncodedPassword = new StringBuilder();
         for (int i = 8; i < tempUser.getPassword().length(); i++) {
             userEncodedPassword.append(tempUser.getPassword().charAt(i));
         }
-
         return new BCryptPasswordEncoder().matches(currentPassword, userEncodedPassword.toString());
     }
 
     @Override
     public void changePassword(String newPassword) {
-
         newPassword = new BCryptPasswordEncoder().encode(newPassword);
         newPassword = "{bcrypt}" + newPassword;
-
         User user = userDao.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         user.setPassword(newPassword);
         userDao.saveUser(user);

@@ -18,7 +18,6 @@ public class UniqueUserFieldConstraintValidator implements ConstraintValidator<U
     }
 
     public boolean isValid(String theValue, ConstraintValidatorContext context) {
-
         return userDao.checkIfUnique(field, theValue);
     }
 }

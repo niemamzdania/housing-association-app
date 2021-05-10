@@ -2,6 +2,7 @@ package com.przemkeapp.housingassociationapp.advice;
 
 import com.przemkeapp.housingassociationapp.Entity.User;
 import com.przemkeapp.housingassociationapp.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,22 +12,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 public class GlobalControllerAdvice {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @ModelAttribute("currentUser")
     public User getCurrentUser() {
-
-        User currentUser = null;
-
         if (isAuthenticated()) {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            currentUser = userService.findUserByUsername(username);
+            return userService.findUserByUsername(username);
         }
-
-        return currentUser;
+        return null;
     }
 
     private boolean isAuthenticated() {

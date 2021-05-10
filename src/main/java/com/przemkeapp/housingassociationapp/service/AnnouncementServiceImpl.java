@@ -28,12 +28,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public void saveAnnouncement(Announcement announcement, String username) {
-
         User user = userDao.findUserByUsername(username);
-
         announcement.setAuthor(user);
         announcement.setDate(LocalDateTime.now());
-
         announcementDao.saveAnnouncement(announcement);
     }
 
